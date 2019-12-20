@@ -1,0 +1,13 @@
+server:
+  port: 8758
+
+turbine:
+  aggregator:
+    cluster-config: default
+  cluster-name-expression: new String("default")
+  app-config: ServiceConsumer,RibbonRestTemplate
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

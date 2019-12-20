@@ -1,0 +1,30 @@
+server:
+  port: 8757
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  application:
+    name: zuul
+
+zuul:
+  routes:
+    ServiceProvider:
+      path: /provider/**
+      serviceId: ServiceProvider
+    ServiceConsumer:
+      path: /consumer/**
+      serviceId: ServiceConsumer
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

@@ -1,0 +1,60 @@
+server:
+  port: 8765
+
+spring:
+  application:
+    name: BootSecurityStarter
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/blog?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+    username: root
+    password: root
+  thymeleaf:
+    encoding: UTF-8
+    mode: HTML5
+    cache: false
+  security:
+    user:
+      name: admin
+      password: admin
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    metadata-map:
+      user.name: admin
+      user.password: admin
+    health-check-url: /actuator/health   #应用实例的相对运行状况检查URL路径默认为 /info/health ，2.0后actuator的地址发生了变化
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        exclude: env,beans
+  endpoint:
+    health:
+      show-details: always
+
+---
+spring:
+  profiles: insecure
+
+---
+# admin登录的用户名和密码
+spring:
+  profiles: secure
+  security:
+    user:
+      name: "user"
+      password: "password"
+
+# 注册给eureka的时候告诉eureka自己的密码
+eureka:
+  instance:
+    metadata-map:
+      "user.name": ${spring.security.user.name}         #These two are needed so that the server
+      "user.password": ${spring.security.user.password} #can access the protected client endpoints

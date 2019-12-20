@@ -1,0 +1,43 @@
+server:
+  port: 9999
+
+
+eureka:
+  instance:
+    health-check-url-path: /actuator/health   #应用实例的相对运行状况检查URL路径默认为 /info/health
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:1111/eureka/  #注册中心地址
+
+spring:
+  boot:
+    admin:
+      client:
+        # server地址
+        url: http://localhost:8759
+        instance:
+          #client地址
+          service-base-url: http://localhost:${server.port}
+          prefer-ip: true
+        username: user
+        password: password
+  application:
+    name: SpringBootAdmin-Client
+
+#Actuator配置：暴露敏感路径，默认情况下，敏感路径并不暴露
+management:
+  endpoints:
+    web:
+      exposure:
+        # 暴露xxx端点，如需暴露多个，用,分隔；如需暴露所有端点，用'*'
+        include: "*"
+  endpoint:
+    health:
+      # 是否展示健康检查详情
+      show-details: ALWAYS
+
+# info信息会显示到SpringBootAdmin的server端，这里取的是pom文件中的数据
+info:
+  version: @project.version@
+  groupId: @project.groupId@
+  artifactId: @project.artifactId@

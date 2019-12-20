@@ -1,0 +1,26 @@
+server:
+  port: 8754
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: ServiceProvider123
+          uri: lb://ServiceProvider
+          predicates:
+            - Path=/provider/**
+          filters:
+            - StripPrefix=1 #表示从uri二级路径开始转发
+        - id: ServiceConsumer44
+          uri: lb://ServiceConsumer
+          predicates:
+            - Path=/consumer/**
+          filters:
+            - StripPrefix=1 #表示从url二级路径开始转发，即/consumer/**转发到ServiceConsumer的/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
